@@ -1,17 +1,45 @@
+#include <cstdio>
+#include <algorithm>
+#include <cmath>
 
+int main() {
+    long t;
+    scanf("%ld", &t);
 
-William has an array of 𝑛 integers 𝑎1,𝑎2,…,𝑎𝑛. In one move he can swap two neighboring items. Two items 𝑎𝑖 and 𝑎𝑗 are considered neighboring if the condition |𝑖−𝑗|=1 is satisfied.
+    while (t--) {
+        long n;
+        scanf("%ld", &n);
 
-William wants you to calculate the minimal number of swaps he would need to perform to make it so that the array does not contain two neighboring items with the same parity.
+        long oddTargetPos1 = 1, oddTargetPos2 = 2;
+        long oddMoves1 = 0, oddMoves2 = 0;
+        long oddCount = 0, evenCount = 0;
 
-Input
-Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤104). Description of the test cases follows.
+        for (long pos = 1; pos <= n; ++pos) {
+            long x;
+            scanf("%ld", &x);
 
-The first line of each test case contains an integer 𝑛 (1≤𝑛≤105) which is the total number of items in William's array.
+            if (x % 2 != 0) { // if x is odd
+                oddMoves1 += std::abs(pos - oddTargetPos1);
+                oddMoves2 += std::abs(pos - oddTargetPos2);
+                oddTargetPos1 += 2;
+                oddTargetPos2 += 2;
+                ++oddCount;
+            } else {
+                ++evenCount;
+            }
+        }
 
-The second line contains 𝑛 integers 𝑎1,𝑎2,…,𝑎𝑛 (1≤𝑎𝑖≤109) which are William's array.
+        long result = -1;
+        if (oddCount == evenCount) {
+            result = std::min(oddMoves1, oddMoves2);
+        } else if (oddCount == evenCount + 1) {
+            result = oddMoves1;
+        } else if (evenCount == oddCount + 1) {
+            result = oddMoves2;
+        }
 
-It is guaranteed that the sum of 𝑛 over all test cases does not exceed 105.
+        printf("%ld\n", result);
+    }
 
-Output
-For each test case output the minimal number of operations needed or −1 if it is impossible to get the array to a state when no neighboring numbers have the same parity.
+    return 0;
+}
